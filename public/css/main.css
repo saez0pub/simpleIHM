@@ -1,0 +1,46 @@
+/*
+Copyright (C) 2014 saez0pub
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+/* 
+    Created on : 14 mars 2014, 21:17:18
+    Author     : saez0pub
+*/
+
+body {
+  padding-top: 50px;
+}
+
+#usernavigation li.dropdown:hover ul.dropdown-menu {
+    display: block;    
+}
+
+#usernavigation .dropdown:not(.open)  > a:focus:not(:hover) {
+  background: transparent;
+  color: #999999;
+}
+
+.highlight {
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    border-radius: 0px 0px 8px 8px;
+    margin-bottom: 14px;
+    padding: 9px 14px;
+}
+
+.idvalue {
+    display: none;
+}
