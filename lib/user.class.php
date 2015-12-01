@@ -22,10 +22,11 @@
  * Class Utilisateur
  */
 class user extends dbIhm {
-  
+
   function __construct() {
     parent::__construct('users');
   }
+
   /**
    * Permet de récupérer l'utilisateur à partir des données d'identifiant
    * @param string $login nom de l'utilisateur, $_GET['login'] si NULL
@@ -35,32 +36,42 @@ class user extends dbIhm {
    */
   function getFromLogin($login = NULL, $password = NULL) {
     global $config;
+    $return = FALSE;
     if ($login == NULL) {
       if (isset($_GET['login'])) {
         $login = $_GET['login'];
       }
     }
 
-    if ($password == NULL) {
-      if (isset($_GET['password'])) {
-        $password = md5($_GET['password']);
-      } elseif (isset($_GET['passwordmd5'])) {
-        $password = $_GET['passwordmd5'];
+    $this->prepare("SELECT * from " . $config['db']['prefix'] . "users where login = :login and enabled = 1");
+    $this->bindParam(":login", $login);
+    $res = $this->executeAndFetch();
+    if (isset($res['password'])) {
+      $hash = $res['password'];
+      if ($password == NULL) {
+        if (isset($_GET['password'])) {
+          if (password_verify($_GET['password'], $hash)) {
+            $return = $res;
+          }
+        } elseif (isset($_GET['passwordmd5'])) {
+          if ($_GET['passwordmd5'] == $hash) {
+            $return = $res;
+          }
+        }
+      }else{
+        if (password_verify($password, $hash)) {
+          $return = $res;
+        }
       }
     }
-
-    $this->prepare("SELECT * from " . $config['db']['prefix'] . "users where login = :login and password = :password and enabled = 1");
-    $this->bindParam(":login", $login);
-    $this->bindParam(":password", $password);
-    $res = $this->executeAndFetch();
-    return $res;
+    return $return;
   }
 
   function getUserMenu() {
     global $config;
 
     $res = '';
-    $this->prepare("SELECT id,nom,link from " . $config['db']['prefix'] . "menu where level = 0 order by ordre" );
+    $this->prepare("SELECT id,nom,link from " . $config['db']['prefix'] . "menu where level = 0 order by ordre");
     $topMenu = $this->executeAndFetchAll();
     foreach ($topMenu as $value) {
       $tmp = Array();

@@ -27,11 +27,11 @@ if (isset($_SERVER['HTTP_HOST'])) {
  * Initialisation de la base de données
  * @return boolean résultat de l'initialisation
  */
-function initDB() {
+function initDB($file = '../var/DB/installDB.sql') {
   global $config, $db;
   $prefix = $config['db']['prefix'];
   $return = TRUE;
-  $sql = str_replace('$prefix$', $prefix, file_get_contents(dirname(__FILE__).'/../var/DB/installDB.sql'));
+  $sql = str_replace('$prefix$', $prefix, file_get_contents(dirname(__FILE__) . '/' . $file));
   $res = $db->query($sql);
   if ($res === FALSE) {
     $return = FALSE;
@@ -60,4 +60,24 @@ function dropDB() {
   }
   return $return;
   ;
+}
+
+function upgradeDB($showresult=true) {
+  global $db, $config;
+  $curConfig = $db->fetchOne("select valeur from `" . $config['db']['prefix'] . "config` where cle = 'version';");
+
+  while ($curConfig['valeur'] !== $config['version']) {
+    $file = '../var/DB/upgrade_' . $curConfig['valeur'] . '.sql';
+    if ($showresult) {echo "upgrading from " . $curConfig['valeur'] . " : $file\n";}
+    $ret = initDB($file);
+    if ($ret === FALSE) {
+      echo "Problème lors de l'upgrade : $file\n";
+      exit;
+    } else {
+      $curConfig = $db->fetchOne("select valeur from `" . $config['db']['prefix'] . "config` where cle = 'version';");
+      if ($showresult) {echo "Upgraded to " . $curConfig['valeur'] . "\n";}
+    }
+  }
+
+  if ($showresult) {echo "Done\n";}
 }

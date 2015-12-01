@@ -1,0 +1,1 @@
+REPLACE INTO `$prefix$config` VALUES ('version', '0.2');

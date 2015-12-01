@@ -1,3 +1,4 @@
+#!/usr/bin/env php 
 <?php
 
 /*
@@ -27,7 +28,10 @@ $password = trim(fgets(STDIN));
 
 $resInit = initDB();
 if ($resInit !== FALSE) {
-  echo "Entrez le mot de passe de l'utilisateur adminihm :\n";
+  echo "Entrez le login de l'utilisateur adminnistrateur :\n";
+  system('stty -echo');
+  $user = trim(fgets(STDIN));
+  echo "Entrez le mot de passe de l'utilisateur $user :\n";
   system('stty -echo');
   $password = trim(fgets(STDIN));
   system('stty echo');
@@ -37,18 +41,23 @@ if ($resInit !== FALSE) {
     $password2 = trim(fgets(STDIN));
     system('stty echo');
     if ($password === $password2) {
-      $newPassword = md5($password);
-      $sql = "UPDATE ".$config['db']['prefix']."users SET password='$newPassword' where login = 'adminihm';";
+      $newPassword = password_hash($password,PASSWORD_DEFAULT);
+      $sql = "INSERT ".$config['db']['prefix']."users VALUES (NULL, '$user','$newPassword','',1);";
       $res = $db->query($sql);
       if ($res === FALSE) {
         echo "Problème dans la mise à jour de mot de passe, vérifier que l'utilisateur de connexion à la base de données est valide\n";
       } else {
         echo "mot de passe mis à jour avec succès";
       }
+    } else {
+      echo "Les mots de passe ne correspondent pas, abandon.";
     }
   } else {
-    echo "Les mots de passe ne correspondent pas, abandon.";
+    echo "Les mot de passe est vide, abandon.";
   }
 }  else {
   echo "Problème dans l'initialisation de la base de données, abandon\n";  
 }
+
+echo "Verifying if upgrade is needed";
+upgradeDB();

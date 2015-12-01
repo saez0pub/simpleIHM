@@ -329,7 +329,7 @@ class dbIhm {
       return FALSE;
     }
 
-    $sql = "select password from `" . $config['db']['prefix'] . "users` where login = 'adminihm';";
+    $sql = "select password from `" . $config['db']['prefix'] . "users` LIMIT 1;";
     $res = $this->fetchOne($sql);
     if ($res === FALSE || empty($res['password'])) {
       return FALSE;
@@ -660,7 +660,6 @@ class dbIhm {
         }
       }
       $return = $this->execute();
-      var_dump($return);
       if ($return !== FALSE) {
         if($isIdAutoIncr === TRUE){
           $return = $this->dbh->lastInsertId();

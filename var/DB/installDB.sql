@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS `$prefix$users` (
   `enabled` tinyint(1) NOT NULL,
   UNIQUE INDEX `idx_$prefix$users_login` (`login`)
   ) ;
-INSERT INTO `$prefix$users` VALUES (NULL, 'adminihm', '', NULL, 1);
 CREATE TABLE IF NOT EXISTS `$prefix$config` (
   `cle` varchar(100) PRIMARY KEY,
   `valeur` varchar(100) NOT NULL
@@ -22,5 +21,7 @@ CREATE TABLE IF NOT EXISTS `$prefix$menu` (
   `ordre` INT NOT NULL,
   UNIQUE INDEX `idx_$prefix$menu_nom_parent` (`nom`, `parent`)
   ) ;
-INSERT INTO `$prefix$menu` VALUES (9999, 'Paramètres', '#', 0, 0, 2);
-INSERT INTO `$prefix$menu` VALUES (NULL, 'Paramètres', 'settings.php', 1, 9999, 1);
+INSERT INTO `$prefix$menu` VALUES (1, 'Paramètres', '#', 0, 0, 9999);
+INSERT INTO `$prefix$menu` VALUES (NULL, 'Utilisateurs', 'users.php', 1, 1, 1);
+INSERT INTO `$prefix$menu` VALUES (NULL, 'Menus', 'users.php', 1, 1, 2);
+INSERT INTO `$prefix$menu` VALUES (NULL, 'Paramètres', 'settings.php', 1, 1, 3);

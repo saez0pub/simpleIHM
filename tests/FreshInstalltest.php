@@ -25,10 +25,10 @@
 class testFreshInstall extends PHPUnit_Framework_TestCase {
 
   public function testSitrouveAdminAvecUnMotDePasseVide_AlorsJAfficheLaPageDeMaintenance() {
-    global $db, $config, $adminPassword;
+    global $db, $config, $adminPassword, $adminLogin;
     $resInit = reinitDB();
     $this->assertNotEquals(FALSE, $resInit);
-    $db->query("UPDATE " . $config['db']['prefix'] . "users SET password='' where login = 'adminihm';");
+    $db->query("UPDATE " . $config['db']['prefix'] . "users SET password='' where login = '$adminLogin';");
     $resCheck = $db->checkDB();
     $this->assertEquals(FALSE, $resCheck);
     $page = new page(TRUE);
@@ -36,7 +36,7 @@ class testFreshInstall extends PHPUnit_Framework_TestCase {
     $resultPage = $page->showPage();
     $template = file_get_contents(dirname(__FILE__) . '/templates/upgradeplz.html');
     $this->assertEquals($template, $resultPage);
-    $db->query("UPDATE " . $config['db']['prefix'] . "users SET password='$adminPassword' where login = 'adminihm';");
+    $db->query("UPDATE " . $config['db']['prefix'] . "users SET password='$adminPassword' where login = '$adminLogin';");
     $this->assertEquals(false, $resCheck);
   }
 

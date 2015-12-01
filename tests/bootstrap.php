@@ -21,6 +21,7 @@
 /**
  * @author saez0pub
  */
+global $adminLogin;
 global $adminPassword;
 global $cookieTest;
 global $pid;
@@ -33,11 +34,12 @@ global $pid;
 
 //Sur une installation fraiche, il faut un mot de passe pour l'admin
 //Pour que les tests fonctionnent, il faut l'applicatif qui tourne et 
-//l'utilisateur adminihm ainsi que son mot de passe valide
+//l'utilisateur $adminLogin ainsi que son mot de passe valide
 //$_GET["password"] = time() + rand(0, 2000);
-$_GET["password"] = 'adminihm';
-$adminPassword = md5($_GET["password"]);
-$_GET["login"] = "adminihm";
+$adminLogin = "admintest";
+$_GET["login"] = $adminLogin;
+$_GET["password"] = $adminLogin;
+$adminPassword = password_hash($_GET["password"],PASSWORD_DEFAULT);
 
 include dirname(__FILE__) . '/../lib/common.php';
 include_once dirname(__FILE__) . '/../lib/dbInstall.function.php';
@@ -48,7 +50,7 @@ $config['serverUrl'] = "http://$host:$port/";
 $config['db']['prefix'] = 'tests_todelete_' . $config['db']['prefix'];
 
 $command = sprintf(
-  'XDEBUG_CONFIG="remote_enable=Off" php -S %s:%d -t %s >/dev/null 2>&1 & echo $!', $host, $port, $docRoot
+  'ihm_prefix='.$config['db']['prefix'].'XDEBUG_CONFIG="remote_enable=Off" php -S %s:%d -t %s >/dev/null 2>&1 & echo $!', $host, $port, $docRoot
 );
 
 $output = array();
@@ -76,11 +78,12 @@ foreach (scandir('.') as $file) {
 }
 
 function reinitDB() {
-  global $db, $config, $adminPassword;
+  global $db, $config, $adminPassword, $adminLogin;
   //Nettoyage des précedents tests en cas d'interuption
   dropDB();
   initDB();
-  $ret = $db->query("UPDATE " . $config['db']['prefix'] . "users SET password='$adminPassword' where login = 'adminihm';");
+  upgradeDB(FALSE);
+  $ret = $db->query($sql = "INSERT ".$config['db']['prefix']."users VALUES (NULL, '$adminLogin','$adminPassword','',1);");
   return $ret;
 }
 
@@ -130,8 +133,8 @@ function initTestTable() {
 
 register_shutdown_function(function() {
   global $cookieTest, $config, $pid;
-  dropDB();
-  unlink($cookieTest);
+  //dropDB();
+  //unlink($cookieTest);
   echo sprintf('%s - Killing process with ID %d', date('r'), $pid) . PHP_EOL;
   exec('kill ' . $pid);
 });

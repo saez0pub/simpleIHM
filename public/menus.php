@@ -23,11 +23,20 @@ include_once dirname(__FILE__).'/../lib/common.php';
 
 $page = new page();
 
-$page->addcontent("
-      <div>
-        <h1>".$config['IhmName']." Home</h1>
-        <p class=\"lead\">Page d'accueil.</p>
-      </div>
-");
-$page->showPage();
+$content="
+      <div class=row>
+        <div class=\"highlight col-md-3\">
+          <h1>Paramètres</h1>
+        </div>
+        <div class=\"col-md-9\">
+";
 
+$settings = new setting();
+$settings->prepare();
+$content.=$settings->getTable();
+$content.="
+        </div>
+      </div>
+";
+$page->addcontent($content);
+$page->showPage();

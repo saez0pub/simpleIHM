@@ -1,6 +1,7 @@
+#!/usr/bin/env php 
 <?php
 
-/* 
+/*
  * Copyright (C) 2014 saez0pub
  *
  * This program is free software; you can redistribute it and/or
@@ -19,15 +20,8 @@
  */
 
 
-include_once dirname(__FILE__).'/../lib/common.php';
+include dirname(__FILE__) . '/../lib/common.php';
+include dirname(__FILE__) . '/../lib/dbInstall.function.php';
 
-$page = new page();
 
-$page->addcontent("
-      <div>
-        <h1>".$config['IhmName']." Home</h1>
-        <p class=\"lead\">Page d'accueil.</p>
-      </div>
-");
-$page->showPage();
-
+upgradeDB();

@@ -34,7 +34,7 @@ function startSession() {
       if (isset($_GET['remember-me']) && $res !== FALSE) {
         $params = session_get_cookie_params();
         setcookie('login', $_GET['login'], $config['cookieTime'], $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-        setcookie('passwordmd5', md5($_GET['password']), $config['cookieTime'], $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+        setcookie('passwordmd5', $res['password'], $config['cookieTime'], $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
       }
       $menu = $user->getUserMenu();
       if (is_array($menu)) {

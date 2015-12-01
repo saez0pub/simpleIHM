@@ -19,8 +19,7 @@
  */
 
 global $config;
-
-//Hack POST overrides GET
+//Hack COOKIE ovverrides POST overrides GET
 foreach ($_COOKIE as $key => $value) {
   $_POST[$key] = $value;
 }
@@ -28,7 +27,7 @@ foreach ($_POST as $key => $value) {
   $_GET[$key] = trim(strip_tags($value));
 }
 //Versionapplicative
-$config['version'] = '0.1';
+$config['version'] = '0.2';
 
 //DB Connexion
 $config['db']['user'] = 'ihm';
@@ -57,7 +56,7 @@ $config['stopOnExec'] = TRUE;
 $config['securite']['redirect'] = 'int';
 $config['securite']['login'] = 'alphanum';
 $config['securite']['password'] = 'mysqlChecked';
-$config['securite']['passwordmd5'] = 'alphanum';
+$config['securite']['passwordmd5'] = 'password_hash';
 $config['securite']['PHPSESSID'] = 'alphanum';
 $config['securite']['remember-me'] = 'digit';
 $config['securite']['XDEBUG_SESSION'] = 'ascii';
@@ -92,3 +91,7 @@ $config['js'][] = './js/bootstrap.min.js';
 $config['js'][] = './js/main.js';
 
 
+//Hack Pourri pour que les tests unitaires en petent pas tout
+if(isset($_SERVER['SERVER_SOFTWARE']) && preg_match('/PHP .* Development Server/', $_SERVER['SERVER_SOFTWARE'])){
+  $config['db']['prefix'] = 'tests_todelete_' . $config['db']['prefix'];
+}

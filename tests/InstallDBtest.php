@@ -25,12 +25,13 @@
 class dbInstallTest extends PHPUnit_Framework_TestCase {
 
   public function testInstallationDB() {
-    global $db, $config, $adminPassword;
+    global $db, $config, $adminPassword, $adminLogin;
     dropDB();
     $resInit = initDB();
     $this->assertNotEquals(FALSE, $resInit);
-    $resPass = $db->query("UPDATE ".$config['db']['prefix']."users SET password='$adminPassword' where login = 'adminihm';");
+    $resPass = $db->query("INSERT ".$config['db']['prefix']."users VALUES (NULL, '$adminLogin','$adminPassword','',1);");
     $this->assertNotEquals(FALSE, $resPass);
+    upgradeDB(FALSE);
     $result = $db->checkDB();
     reinitDB();
     $this->assertEquals(TRUE, $result);

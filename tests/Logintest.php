@@ -51,11 +51,11 @@ class testLogin extends PHPUnit_Framework_TestCase {
   }
 
   public function testSiMonCookieAUnUtilisateurValide_AlorsJaiLaPageDIndex() {
-    global $config;
+    global $config, $adminLogin, $adminPassword;
     $ch = curl_init($config['serverUrl']);
-    $content = "localhost	FALSE	/	FALSE	" . $config['cookieTime'] . "	login	adminihm
-localhost	FALSE	/	FALSE	" . $config['cookieTime'] . "	passwordmd5	" . md5($_GET['password']);
-    $cookie = tempnam("/tmp", "COOKIE");
+    $content = "localhost	FALSE	/	FALSE	" . $config['cookieTime'] . "	login	$adminLogin
+localhost	FALSE	/	FALSE	" . $config['cookieTime'] . "	passwordmd5	".$adminPassword;
+    $cookie = tempnam("/tmp", "COOKIEtestSiMonCookieAUnUtilisateurValide_AlorsJaiLaPageDIndex");
     file_put_contents($cookie, $content);
     curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

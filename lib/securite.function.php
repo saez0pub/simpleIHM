@@ -51,12 +51,14 @@ function doSecurityCheck($rediRectToIndex = TRUE) {
         case 'mysqlChecked':
           $regexp = '.*';
           break;
+        case 'password_hash':
+          $regexp = '[a-zA-Z0-9$\/.]';
+          break;
         default:
           stopSession($rediRectToIndex, $stopExec, $extra = 'index.php?redirect=0&champs='.htmlentities($key));
           break;
       }
       if (!preg_match("/$regexp/", $value)) {
-echo "$key-$value";
         stopSession($rediRectToIndex, $stopExec, $extra = 'index.php?redirect=0&champs='.htmlentities($key));
       }
     } else {

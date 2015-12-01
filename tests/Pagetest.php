@@ -35,6 +35,7 @@ class pageTest extends PHPUnit_Framework_TestCase {
    */
   public function testHeaderSansParametre() {
     // Arrange
+    initLogin();
     $page = new page(TRUE);
     $template = file_get_contents(dirname(__FILE__) . '/templates/header.html');
 
@@ -44,6 +45,7 @@ class pageTest extends PHPUnit_Framework_TestCase {
 
   public function testFooterSansParametre() {
     // Arrange
+    initLogin();
     $page = new page(TRUE);
 
     $template = file_get_contents(dirname(__FILE__) . '/templates/footer.html');
@@ -94,6 +96,7 @@ class pageTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testJAiLIndexParDefaut() {
+    initLogin();
     $page = new page(TRUE);
     $page->prepareHeader(FALSE);
     $result = $page->showPage();
@@ -114,6 +117,7 @@ class pageTest extends PHPUnit_Framework_TestCase {
 
   public function testSimaSessionRenseigneUnMenu_AlorsJaiUnMenu() {
     global $config;
+    initLogin();
     $page = new page(TRUE);
     $_SESSION[$config['sessionName']]['menu'] = array('test' => 'toto');
     $result = $page->prepareHeader(TRUE);

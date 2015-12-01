@@ -24,11 +24,11 @@
  */
 class testModal extends PHPUnit_Framework_TestCase {
 
-  public function testSilaclePrimaireEstUnAutoInCrement_AlorsJeLeCacheDansLeModal(){
+  public function atestSilaclePrimaireEstUnAutoInCrement_AlorsJeLeCacheDansLeModal(){
    global $config, $cookieTest;
-   initDB();
+   reinitDB();
    initLogin();
-    $ch = curl_init($config['serverUrl'].'ajax/modal.php?table=user&champs=id');
+    $ch = curl_init($config['serverUrl'].'ajax/modal.php?table=user&champs=id');  
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieTest);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -42,7 +42,7 @@ class testModal extends PHPUnit_Framework_TestCase {
 
   public function testSilaclePrimaireNEstPasUnAutoInCrement_AlorsJeLAfficheDansLeModal(){
    global $config, $cookieTest;
-   initDB();
+   reinitDB();
    initLogin();
     $ch = curl_init($config['serverUrl'].'ajax/modal.php?table=setting&champs=cle');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
